@@ -2,6 +2,12 @@
 
 require "mongoid/association_scope"
 
+ENV["MONGOID_ENV"] ||= "test"
+
+Dir[File.expand_path('support/**/*.rb', __dir__)].sort.each { |f| require f }
+
+Mongoid.load!(File.expand_path('support/config/mongoid.yml', __dir__))
+
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = ".rspec_status"
@@ -11,5 +17,9 @@ RSpec.configure do |config|
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
+  end
+
+  config.after(:example) do
+    [Post, User].each {|m| m.delete_all }
   end
 end

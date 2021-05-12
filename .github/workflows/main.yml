@@ -4,13 +4,27 @@ on: [push,pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        # Due to https://github.com/actions/runner/issues/849, we have to use quotes for '3.0'
+        ruby-version: [2.5, 2.6, 2.7, '3.0']
+        mongodb-version: [4.0]
+        gemfile: [mongoid5, mongoid6]
+    runs-on: ${{ matrix.os }}
+    env: # $BUNDLE_GEMFILE must be set at the job level, so it is set for all steps
+      BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.6.4
+        ruby-version: ${{ matrix.ruby-version }}
         bundler-cache: true
-    - name: Run the default task
-      run: bundle exec rake
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.4.0
+      with:
+        mongodb-version: ${{ matrix.mongodb-version }}
+    - name: Run the test
+      run: bundle exec rspec

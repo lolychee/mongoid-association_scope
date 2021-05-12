@@ -1,0 +1,12 @@
+test:
+  clients:
+    default:
+      database: <%= ENV["MONGODB_DATABASE"] || "test" %>
+      hosts:
+      <% ENV.fetch("MONGODB_HOSTS", "localhost:27017").to_s.split(",").each do |host| %>
+        - <%= host.strip %>
+      <% end %>
+      options:
+        read:
+          mode: :primary
+        max_pool_size: 1

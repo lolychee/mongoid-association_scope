@@ -1,0 +1,30 @@
+version: "3"
+services:
+  dev:
+    user: vscode
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VARIANT: "2"
+        INSTALL_NODE: "false"
+        NODE_VERSION: "lts/*"
+    volumes:
+      - bundle:/usr/local/bundle
+      - ..:/workspace:delegated
+    depends_on:
+      - mongodb
+    environment:
+      - LANG=C.UTF-8
+      - BUNDLE_JOBS=8
+      - MONGODB_HOSTS=mongodb:27017
+    command: ["sleep", "infinity"]
+
+  mongodb:
+    image: mongo:4.0
+    volumes:
+      - mongodb:/data/db
+
+volumes:
+  bundle:
+  mongodb:
