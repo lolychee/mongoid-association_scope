@@ -6,6 +6,7 @@ class Post
   field :published_at, type: DateTime
 
   belongs_to :author, class_name: "User"
+  has_many :likes, as: :likeable
 
   scope :published, -> { where(:published_at.ne => nil) }
 end

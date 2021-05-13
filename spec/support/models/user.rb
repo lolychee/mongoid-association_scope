@@ -5,4 +5,6 @@ class User
 
   has_many :posts, inverse_of: :author
   has_many :published_posts, -> { published }, class_name: "Post", inverse_of: nil, foreign_key: :author_id
+
+  has_many :likes
 end

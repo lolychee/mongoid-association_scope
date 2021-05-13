@@ -9,8 +9,8 @@ module Mongoid
         scope.is_a?(Proc)
       end
 
-      def scoped
-        scope? ? klass.criteria.instance_exec(&scope) : klass.criteria
+      def scoped(criteria = klass.criteria)
+        scope? ? criteria.instance_exec(&scope) : criteria
       end
     end
   end

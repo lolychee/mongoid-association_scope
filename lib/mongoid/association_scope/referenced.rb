@@ -3,7 +3,7 @@ module Mongoid
     module Referenced
       module Scoped
         def criteria(metadata, object, type = nil)
-          metadata.scoped.merge(super)
+          metadata.scoped(super)
         end
       end
     end

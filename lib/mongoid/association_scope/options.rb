@@ -4,7 +4,12 @@ module Mongoid
   module AssociationScope
     module Options
       def self.included(base)
-        (base::COMMON |= %i[scope]).freeze
+        begin
+          old_verbose, $VERBOSE = $VERBOSE, nil
+          (base::COMMON |= %i[scope]).freeze
+        ensure
+          $VERBOSE = old_verbose
+        end
       end
     end
   end

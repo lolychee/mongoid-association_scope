@@ -20,6 +20,6 @@ RSpec.configure do |config|
   end
 
   config.after(:example) do
-    [Post, User].each {|m| m.delete_all }
+    [Like, Post, User].each {|m| m.delete_all }
   end
 end
